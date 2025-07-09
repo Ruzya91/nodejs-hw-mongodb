@@ -4,7 +4,7 @@ import dbInit from './db/initMongoConnection.js';
 import app from './index.js';
 import mongoose from 'mongoose';
 
-const port = process.env.SERVER_PORT || 8000;
+const port = process.env.SERVER_PORT || 3000;
 console.log('1');
 let server;
 

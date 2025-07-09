@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import { handleGetContactById } from './controllers/contactsController.js';
+import {
+  handleGetContactById,
+  handleGetAllContacts,
+} from './controllers/contactsController.js';
 
 const app = express();
 console.log('23');
@@ -9,6 +12,7 @@ app.use(express.json());
 
 // === Routes ===
 app.get('/contacts/:contactId', handleGetContactById);
+app.get('/contacts', handleGetAllContacts);
 
 // 404 handler
 app.use((req, res) => {

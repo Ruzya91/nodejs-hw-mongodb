@@ -9,11 +9,43 @@ import {
 
 // GET /contacts
 export const handleGetAllContacts = async (req, res) => {
-  const contacts = await getAllContacts();
+  const page = parseInt(req.query.page) || 1;
+  const perPage = parseInt(req.query.perPage) || 10;
+  const sortBy = req.query.sortBy || 'name';
+  const sortOrder = req.query.sortOrder || 'asc';
+  const type = req.query.type;
+  const isFavourite = req.query.isFavourite;
+
+  const filters = {
+    ...(type && { type }),
+    ...(typeof isFavourite !== 'undefined' && { isFavourite }),
+  };
+
+  const { contacts, totalItems } = await getAllContacts(
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filters,
+  );
+
+  const totalPages = Math.ceil(totalItems / perPage);
+
   res.status(200).json({
     status: 200,
-    message: 'Successfully fetched all contacts',
-    data: contacts,
+    message: 'Successfully fetched filtered contacts!',
+    data: {
+      contacts,
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      sortBy,
+      sortOrder,
+      filters,
+      hasPreviousPage: page > 1,
+      hasNextPage: page < totalPages,
+    },
   });
 };
 

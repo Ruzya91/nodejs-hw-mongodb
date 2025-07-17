@@ -17,7 +17,7 @@ export const handleGetAllContacts = async (req, res) => {
   const isFavourite = req.query.isFavourite;
 
   const filters = {
-    ...(type && { type }),
+    ...(type && { contactType: type }),
     ...(typeof isFavourite !== 'undefined' && { isFavourite }),
   };
 
@@ -35,14 +35,11 @@ export const handleGetAllContacts = async (req, res) => {
     status: 200,
     message: 'Successfully fetched filtered contacts!',
     data: {
-      contacts,
+      data: contacts,
       page,
       perPage,
       totalItems,
       totalPages,
-      sortBy,
-      sortOrder,
-      filters,
       hasPreviousPage: page > 1,
       hasNextPage: page < totalPages,
     },

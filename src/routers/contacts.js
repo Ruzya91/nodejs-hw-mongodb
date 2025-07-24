@@ -19,7 +19,7 @@ import {
 import authenticate from '../middlewares/authenticate.js';
 
 const router = express.Router();
-router.use(authenticate);
+// router.use(authenticate);
 router.get('/', ctrlWrapper(handleGetAllContacts));
 
 router.get('/:contactId', isValidId, ctrlWrapper(handleGetContactById));

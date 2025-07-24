@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const contactSchema = new mongoose.Schema(
   {
@@ -12,10 +13,11 @@ const contactSchema = new mongoose.Schema(
       required: true,
       default: 'personal',
     },
+    userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },
   },
   { timestamps: true },
 );
 
-export const Contact = mongoose.model('Contact', contactSchema, 'contacts');
-
+export const Contact = model('Contact', contactSchema, 'contacts');
+// export const ContactsCollection = model('contacts', contactSchema);
 export default Contact;

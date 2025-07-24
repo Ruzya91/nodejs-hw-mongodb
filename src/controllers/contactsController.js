@@ -10,7 +10,7 @@ import {
 // GET /contacts
 export const handleGetAllContacts = async (req, res) => {
   console.log('💡 GET /contacts hit');
-  const userId = '686ee4c5e8239f8c2765728a';
+  const userId = req.user._id;
 
   const page = parseInt(req.query.page) || 1;
   const perPage = parseInt(req.query.perPage) || 10;
@@ -53,7 +53,7 @@ export const handleGetAllContacts = async (req, res) => {
 // GET /contacts/:contactId
 export const handleGetContactById = async (req, res) => {
   const { contactId } = req.params;
-  const userId = '686ee4c5e8239f8c2765728a';
+  const userId = req.user._id;
 
   const contact = await getContactById(contactId, userId); // 🔐 тільки свої контакти
 
@@ -70,7 +70,7 @@ export const handleGetContactById = async (req, res) => {
 
 // POST /contacts
 export const handleCreateContact = async (req, res) => {
-  const userId = '686ee4c5e8239f8c2765728a';
+  const userId = req.user._id;
   const newContact = await createContact({ ...req.body, userId }); // 🔐 додаємо userId
 
   res.status(201).json({
@@ -83,7 +83,7 @@ export const handleCreateContact = async (req, res) => {
 // PATCH /contacts/:contactId
 export const handlePatchContact = async (req, res) => {
   const { contactId } = req.params;
-  const userId = '686ee4c5e8239f8c2765728a';
+  const userId = req.user._id;
 
   const updatedContact = await updateContactById(contactId, req.body, userId); // 🔐 з userId
 
@@ -101,7 +101,7 @@ export const handlePatchContact = async (req, res) => {
 // DELETE /contacts/:contactId
 export const handleDeleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const userId = '686ee4c5e8239f8c2765728a';
+  const userId = req.user._id;
 
   const deletedContact = await deleteContactById(contactId, userId); // 🔐 з userId
 

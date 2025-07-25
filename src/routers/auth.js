@@ -10,9 +10,9 @@ import { registerSchema } from '../schemas/authSchemas.js';
 import { loginUserSchema } from '../schemas/userValidationSchemas.js';
 
 const router = express.Router();
-
-router.post('/register', validateBody(registerSchema), handleRegisterUser);
 router.post('/login', validateBody(loginUserSchema), handleLoginUser);
+router.post('/register', validateBody(registerSchema), handleRegisterUser);
+
 router.post('/refresh', handleRefreshSession);
 router.post('/logout', handleLogoutUser);
 export default router;

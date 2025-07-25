@@ -13,10 +13,12 @@ app.get('/', (req, res) => {
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
+app.use('/auth', authRouter);
 app.use('/contacts', contactsRouter);
+
 app.use(notFoundHandler);
 app.use(errorHandler);
-app.use('/auth', authRouter);
-app.use(cookieParser());
+
 export default app;

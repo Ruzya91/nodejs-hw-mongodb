@@ -104,7 +104,7 @@ export const refreshSession = async (refreshToken) => {
     });
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-  } catch (err) {
+  } catch (error) {
     throw createError(401, 'Refresh token expired or invalid');
   }
 };

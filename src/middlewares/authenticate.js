@@ -14,14 +14,14 @@ export const authenticate = async (req, res, next) => {
 
     const token = authHeader.split(' ')[1];
 
-    const decoded = jwt.verify(token, JWT_SECRET); // 👈 перевіряємо токен
-    const user = await UsersCollection.findById(decoded.userId); // 👈 шукаємо користувача
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await UsersCollection.findById(decoded.userId);
 
     if (!user) {
       throw createError(401, 'User not found');
     }
 
-    req.user = user; // 👈 ВАЖЛИВО!
+    req.user = user;
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {

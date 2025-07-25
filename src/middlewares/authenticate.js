@@ -1,41 +1,32 @@
-import jwt from 'jsonwebtoken';
 import createError from 'http-errors';
+import jwt from 'jsonwebtoken';
 import { UsersCollection } from '../db/models/user.js';
 
-const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-const authenticate = async (req, res, next) => {
+export const authenticate = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization || '';
+    const authHeader = req.headers.authorization;
 
-    if (!authHeader.startsWith('Bearer ')) {
-      throw createError(401, 'Authorization header missing or malformed');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw createError(401, 'Missing or invalid Authorization header');
     }
 
     const token = authHeader.split(' ')[1];
 
-    let payload;
-
-    try {
-      payload = jwt.verify(token, ACCESS_SECRET);
-    } catch (err) {
-      if (err.name === 'TokenExpiredError') {
-        throw createError(401, 'Access token expired');
-      }
-      throw createError(401, 'Invalid access token');
-    }
-
-    const user = await UsersCollection.findById(payload.userId);
+    const decoded = jwt.verify(token, JWT_SECRET); // 👈 перевіряємо токен
+    const user = await UsersCollection.findById(decoded.userId); // 👈 шукаємо користувача
 
     if (!user) {
       throw createError(401, 'User not found');
     }
 
-    req.user = user;
+    req.user = user; // 👈 ВАЖЛИВО!
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return next(createError(401, 'Access token expired'));
+    }
+    next(createError(401, 'Invalid access token'));
   }
 };
-
-export default authenticate;

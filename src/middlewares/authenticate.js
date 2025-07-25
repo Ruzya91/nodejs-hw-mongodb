@@ -21,7 +21,7 @@ export const authenticate = async (req, res, next) => {
       throw createError(401, 'User not found');
     }
 
-    req.user = user;
+    req.user = user.toObject();
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {

@@ -103,7 +103,7 @@ export const refreshSession = async (refreshToken) => {
       refreshTokenValidUntil,
     });
 
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    return newAccessToken;
   } catch (error) {
     throw createError(401, 'Refresh token expired or invalid');
   }

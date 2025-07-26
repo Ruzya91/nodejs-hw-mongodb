@@ -31,6 +31,7 @@ export const handleGetAllContacts = async (req, res) => {
     sortBy,
     sortOrder,
     filters,
+    userId,
   );
 
   const totalPages = Math.ceil(totalItems / perPage);

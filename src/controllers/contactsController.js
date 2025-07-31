@@ -72,7 +72,12 @@ export const handleGetContactById = async (req, res) => {
 // POST /contacts
 export const handleCreateContact = async (req, res) => {
   const userId = req.user._id;
-  const newContact = await createContact({ ...req.body, userId }); // 🔐 додаємо userId
+  const photoUrl = req.file ? req.file.path : null;
+  const newContact = await createContact({
+    ...req.body,
+    userId,
+    photo: photoUrl,
+  }); // 🔐 додаємо userId
 
   res.status(201).json({
     status: 201,
@@ -85,7 +90,11 @@ export const handleCreateContact = async (req, res) => {
 export const handlePatchContact = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
-
+  const photoUrl = req.file ? req.file.path : undefined;
+  const updateData = {
+    ...req.body,
+    ...(photoUrl && { photo: photoUrl }),
+  };
   const updatedContact = await updateContactById(contactId, req.body, userId); // 🔐 з userId
 
   if (!updatedContact) {

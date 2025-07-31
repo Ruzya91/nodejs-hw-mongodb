@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from '../middlewares/upload.js';
 import {
   handleGetContactById,
   handleGetAllContacts,
@@ -35,5 +36,9 @@ router.patch(
   ctrlWrapper(handlePatchContact),
 );
 router.delete('/:contactId', isValidId, ctrlWrapper(handleDeleteContact));
+
+router.post('/', upload.single('photo'), handleCreateContact);
+
+router.patch('/:contactId', upload.single('photo'), handlePatchContact);
 
 export default router;

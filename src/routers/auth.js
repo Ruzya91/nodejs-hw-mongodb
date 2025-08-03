@@ -22,5 +22,6 @@ router.post('/logout', handleLogoutUser);
 router.post('/send-reset-email', sendResetEmail);
 
 router.post('/reset-pwd', validateBody(resetPasswordSchema), resetPassword);
+router.post('/forgot-password', sendResetEmail);
 
 export default router;

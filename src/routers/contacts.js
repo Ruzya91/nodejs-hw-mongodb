@@ -21,24 +21,26 @@ import { authenticate } from '../middlewares/authenticate.js';
 
 const router = express.Router();
 router.use(authenticate);
-router.get('/', ctrlWrapper(handleGetAllContacts));
 
+router.get('/', ctrlWrapper(handleGetAllContacts));
 router.get('/:contactId', isValidId, ctrlWrapper(handleGetContactById));
+
+// ✅ Обновлённые маршруты с загрузкой фото
 router.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(handleCreateContact),
 );
+
 router.patch(
   '/:contactId',
   isValidId,
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(handlePatchContact),
 );
+
 router.delete('/:contactId', isValidId, ctrlWrapper(handleDeleteContact));
-
-router.post('/', upload.single('photo'), handleCreateContact);
-
-router.patch('/:contactId', upload.single('photo'), handlePatchContact);
 
 export default router;

@@ -90,12 +90,15 @@ export const handleCreateContact = async (req, res) => {
 export const handlePatchContact = async (req, res) => {
   const { contactId } = req.params;
   const userId = req.user._id;
+
   const photoUrl = req.file ? req.file.path : undefined;
+
   const updateData = {
     ...req.body,
     ...(photoUrl && { photo: photoUrl }),
   };
-  const updatedContact = await updateContactById(contactId, req.body, userId); // 🔐 з userId
+
+  const updatedContact = await updateContactById(contactId, updateData, userId);
 
   if (!updatedContact) {
     throw createError(404, 'Contact not found');

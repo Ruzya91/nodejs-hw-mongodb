@@ -5,8 +5,11 @@ import contactsRouter from './routers/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
 import cookieParser from 'cookie-parser';
+import apiDocsRouter from './routers/api-docs.js';
 
 const app = express();
+
+app.use('/api-docs', apiDocsRouter);
 app.get('/', (req, res) => {
   res.json({ message: 'API is running' });
 });

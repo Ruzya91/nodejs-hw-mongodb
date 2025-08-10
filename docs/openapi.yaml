@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Contacts API
+  version: 1.0.0
+  description: API for managing contacts
+  contact:
+    name: API Support
+    email: support@example.com
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+tags:
+  - name: Contacts
+    description: Operations related to managing contacts
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /contacts:
+    get:
+      tags:
+        - Contacts
+      summary: Get all contacts
+      operationId: getAllContacts
+      description: Retrieve a list of all contacts with optional filters and pagination.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number for pagination
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          description: Number of contacts per page
+        - name: contactType
+          in: query
+          schema:
+            type: string
+            enum: [work, home, personal]
+          description: Filter contacts by type
+        - name: isFavourite
+          in: query
+          schema:
+            type: boolean
+          description: Filter contacts by favourite status
+      responses:
+        '200':
+          description: List of contacts successfully retrieved
+
+    post:
+      tags:
+        - Contacts
+      summary: Create a new contact
+      operationId: createContact
+      description: Add a new contact to the database.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - phoneNumber
+                - contactType
+              properties:
+                name:
+                  type: string
+                phoneNumber:
+                  type: string
+                email:
+                  type: string
+                isFavourite:
+                  type: boolean
+                contactType:
+                  type: string
+                  enum: [work, home, personal]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Contact successfully created
+
+  /contacts/{contactId}:
+    get:
+      tags:
+        - Contacts
+      summary: Get a contact by ID
+      operationId: getContactById
+      description: Retrieve a contact from the database by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID of the contact to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Contact successfully retrieved
+        '404':
+          description: Contact not found
+
+    patch:
+      tags:
+        - Contacts
+      summary: Update a contact by ID
+      operationId: updateContact
+      description: Update one or more fields of a contact.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID of the contact to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phoneNumber:
+                  type: string
+                email:
+                  type: string
+                isFavourite:
+                  type: boolean
+                contactType:
+                  type: string
+                  enum: [work, home, personal]
+                photo:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Contact successfully updated
+        '404':
+          description: Contact not found
+
+    delete:
+      tags:
+        - Contacts
+      summary: Delete a contact by ID
+      operationId: deleteContact
+      description: Remove a contact from the database by its ID.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID of the contact to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Contact successfully deleted
+        '404':
+          description: Contact not found

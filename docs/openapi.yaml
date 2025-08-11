@@ -7,7 +7,9 @@ info:
     name: API Support
     email: support@example.com
 servers:
-  - url: http://localhost:3000/api
+  - url: https://your-deployed-domain.com/api
+    description: Deployed server
+  - url: http://localhost:3000
     description: Local development server
 
 tags:
@@ -37,13 +39,15 @@ paths:
           schema:
             type: integer
             minimum: 1
+            default: 1
           description: Page number for pagination
-        - name: limit
+        - name: perPage
           in: query
           schema:
             type: integer
             minimum: 1
             maximum: 100
+            default: 10
           description: Number of contacts per page
         - name: contactType
           in: query
@@ -59,7 +63,6 @@ paths:
       responses:
         '200':
           description: List of contacts successfully retrieved
-
     post:
       tags:
         - Contacts

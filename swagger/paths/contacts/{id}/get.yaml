@@ -1,9 +1,9 @@
 get:
   tags:
     - Contacts
-  summary: Get all contacts
+  summary: Get all contacts with pagination
   operationId: getAllContacts
-  description: Retrieve a list of contacts from the database, with optional filtering.
+  description: Retrieve a paginated list of contacts from the database.
   security:
     - bearerAuth: []
   parameters:
@@ -14,22 +14,64 @@ get:
       schema:
         type: integer
         example: 1
-    - name: limit
+    - name: perPage
       in: query
       required: false
       description: Number of results per page
       schema:
         type: integer
         example: 10
-    - name: contactType
-      in: query
-      required: false
-      description: Filter contacts by type
-      schema:
-        type: string
-        enum: [personal, business]
   responses:
     '200':
-      description: Successful response
+      description: Successfully found contacts
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 200
+              message:
+                type: string
+                example: Successfully found contacts!
+              data:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Contact'
+                  page:
+                    type: integer
+                    example: 2
+                  perPage:
+                    type: integer
+                    example: 4
+                  totalItems:
+                    type: integer
+                    example: 6
+                  totalPages:
+                    type: integer
+                    example: 2
+                  hasPreviousPage:
+                    type: boolean
+                    example: true
+                  hasNextPage:
+                    type: boolean
+                    example: false
     '401':
       description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 401
+              message:
+                type: string
+                example: Unauthorized
+              data:
+                nullable: true

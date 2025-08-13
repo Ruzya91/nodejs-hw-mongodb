@@ -59,6 +59,43 @@ components:
               type: boolean
               example: true
 
+    ContactResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Contact successfully retrieved
+        data:
+          $ref: '#/components/schemas/Contact'
+
+    CreateContactResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 201
+        message:
+          type: string
+          example: Contact successfully created
+        data:
+          $ref: '#/components/schemas/Contact'
+
+    DeleteContactResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Contact successfully deleted
+        data:
+          type: object
+          example: {}
+
     ErrorResponse:
       type: object
       properties:
@@ -197,7 +234,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/CreateContactResponse'
         '400':
           description: Validation error
           content:
@@ -230,7 +267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/ContactResponse'
         '404':
           description: Contact not found
           content:
@@ -277,7 +314,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/ContactResponse'
         '400':
           description: Validation error
           content:
@@ -304,8 +341,12 @@ paths:
           schema:
             type: string
       responses:
-        '204':
+        '200':
           description: Contact deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteContactResponse'
         '404':
           description: Contact not found
           content:
